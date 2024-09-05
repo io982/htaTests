@@ -9,8 +9,16 @@ pathBtn.onclick = openFolerDialog;
 
 function openFolerDialog() {
     var shell = new ActiveXObject("WScript.Shell");
-    var script = "<script>document.title='Выбрать директорию'; var WINDOWWIDTH = 800; var WINDOWHEIGHT = 500; resizeTo(WINDOWWIDTH, WINDOWHEIGHT); moveTo(screen.width / 2 - WINDOWWIDTH / 2, screen.height / 2 - WINDOWHEIGHT / 2)</script>";
-    var body = "<hta:application id='selectFolder' border='thin' caption='yes' maximizeButton='no' minimizeButton='no' showInTaskbar='yes' singleInstance='yes' sysMenu='yes' windowState='normal' scroll='no'/><h2>выбрать папку</h2>"    
+    //script section
+    var script = "<script>"
+    script += "document.title='Выбрать директорию'; var WINDOWWIDTH = 800; var WINDOWHEIGHT = 500; resizeTo(WINDOWWIDTH, WINDOWHEIGHT); moveTo(screen.width / 2 - WINDOWWIDTH / 2, screen.height / 2 - WINDOWHEIGHT / 2);";
+    //script += "alert('C:\projects\htaTests'); "
+    //script += "function getFileSystemData(path) { try {var fso = new ActiveXObject('Scripting.FileSystemObject'); var folder = fso.GetFolder(path); return parseFolder(folder); } catch (e) { alert('ActiveXObject не поддерживается или доступ к файловой системе запрещен.'); return null; }}"
+    script += "</script>"
+    //end script section
+
+    var body = "<hta:application id='selectFolder' border='thin' caption='yes' maximizeButton='no' minimizeButton='no' showInTaskbar='yes' singleInstance='yes' sysMenu='yes' windowState='normal' scroll='no'/><h2>выбрать папку</h2>";
+    body += "<div id='file-system'></div>";
     
     shell.Exec("mshta.exe \"about:" + body + script +"\"")
 }
