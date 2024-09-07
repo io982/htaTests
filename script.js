@@ -8,15 +8,26 @@ var pathBtn = document.getElementById('choosePath')
 pathBtn.onclick = openFolerDialog;
 
 function openFolerDialog() {
-    var shell = new ActiveXObject("WScript.Shell");    
-   // var script = "<script></script>"
-    //script += "document.title='Выбрать директорию';resizeTo(800,500);moveTo(screen.width/2-400,screen.height/2-250);";    
-   // script += "</script>"
+    var shell = new ActiveXObject("WScript.Shell");
+    var fso = new ActiveXObject("Scripting.FileSystemObject");
 
-    //var body = "<body id='popUpBody'></body>"; 
-    //alert("mshta.exe \"about:" + body + script +"\"")       
-    //shell.Exec("mshta.exe \"about:" + body + script +"\"")
-    //shell.Exec("mshta.exe \"about:file://" + "\"")
+    var body = "<html><body id='popUpBody'></body>"; 
+    var script = "<script>"
+    script += "document.title='Выбрать директорию';resizeTo(800,500);moveTo(screen.width/2-400,screen.height/2-250);"; 
+    script += "var body = document.getElementById('popUpBody');"
+    script += "body.innerHTML = '<h1>Выбор папки</h1>';"  
+    script += "</script></html>"
+
+    var tempFile = fso.GetSpecialFolder(2) + "\\popUptmp.html";
+    var file = fso.CreateTextFile(tempFile, true);
+    file.Write(body + script);
+    file.Close();
+
+    
+    alert(body + script);
+    
+    shell.Exec("mshta.exe \"file://" + tempFile + "\"");
+    
 }   
 
 
