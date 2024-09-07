@@ -4,58 +4,49 @@ var test = 101;
 resizeTo(WINDOWWIDTH, WINDOWHEIGHT);
 moveTo(screen.width / 2 - WINDOWWIDTH / 2, screen.height / 2 - WINDOWHEIGHT / 2)
 
+var shell = new ActiveXObject("WScript.Shell");
+
 var pathBtn = document.getElementById('choosePath')
-pathBtn.onclick = openFolerDialog;
+pathBtn.onclick = openD;
 
-function openFolerDialog() {
-    var shell = new ActiveXObject("WScript.Shell");
-    var fso = new ActiveXObject("Scripting.FileSystemObject");
-
-    var body = "<html><body id='popUpBody'></body>"; 
-    var script = "<script>"
-    script += "document.title='Выбрать директорию';resizeTo(800,500);moveTo(screen.width/2-400,screen.height/2-250);"; 
-    script += "var body = document.getElementById('popUpBody');"
-    script += "body.innerHTML = '<h1>Выбор папки</h1>';"  
-    script += "</script></html>"
-
-    var tempFile = fso.GetSpecialFolder(2) + "\\popUptmp.html";
-    var file = fso.CreateTextFile(tempFile, true);
-    file.Write(body + script);
-    file.Close();
-
+function openD() {    
     
-    alert(body + script);
-    
-    shell.Exec("mshta.exe \"file://" + tempFile + "\"");
-    
-}   
-
-
-
-
-function selectFolder() {
-        try {
-            var objExcel = new ActiveXObject("Excel.Application");
-            var objDialog = objExcel.FileDialog(4); // 4 соответствует msoFileDialogFolderPicker
-
-            objDialog.Title = "Выберите папку";
-            objDialog.AllowMultiSelect = false;
-            objDialog.InitialFileName = "C:\\Users"; // Указываем начальную папку без завершающего слэша
-
-            // Устанавливаем окно HTA на передний план
-            setForegroundWindow();
-
-            if (objDialog.Show() == -1) { // Если пользователь выбрал папку
-                var strFolderPath = objDialog.SelectedItems(1);
-                alert("Вы выбрали папку: " + strFolderPath);
-            } else {
-                alert("Выбор папки отменен.");
-            }
-
-            objExcel.Quit();
-        } catch (e) {
-            alert("Ошибка: " + e.message);
-        }
+    var fileName = createFolerDialogFile();  
+    shell.Run("%TMP%/" + fileName,1,true);         
 }
 
-   
+function createFolerDialogFile() {
+    try {
+       var fileName = "popUptmp.hta"
+        var fso = new ActiveXObject("Scripting.FileSystemObject");
+
+        var body = "<html>";
+
+        body += "<head>"
+        body += "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css' integrity='sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N' crossorigin='anonymous'></link>"
+        body += "</head>"
+
+        body += "<body id='popUpBody'>";
+        body += "</body>"
+
+        body += "<script>"
+        body += "document.title='Выбрать директорию';resizeTo(800,500);moveTo(screen.width/2-400,screen.height/2-250);";
+        body += "var body = document.getElementById('popUpBody');"
+        body += "body.innerHTML = '<h1>Выбор папки</h1>';"
+
+        body += "</script>"
+
+        body += "</html>"
+
+        var tempFile = fso.GetSpecialFolder(2) + "\\" + fileName;
+        var file = fso.CreateTextFile(tempFile, true);
+        file.Write(body);
+        file.Close();
+
+        return fileName;
+       //return shell.Exec("mshta.exe \"file://" + tempFile + "\"")
+    } catch (e) {        
+        alert("Ошибка: " + e.message);
+        return null;
+    }
+}
