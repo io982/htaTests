@@ -5,6 +5,7 @@ resizeTo(WINDOWWIDTH, WINDOWHEIGHT);
 moveTo(screen.width / 2 - WINDOWWIDTH / 2, screen.height / 2 - WINDOWHEIGHT / 2)
 
 var shell = new ActiveXObject("WScript.Shell");
+var fso = new ActiveXObject("Scripting.FileSystemObject");
 
 var pathBtn = document.getElementById('choosePath')
 pathBtn.onclick = openD;
@@ -17,8 +18,7 @@ function openD() {
 
 function createFolerDialogFile() {
     try {
-       var fileName = "popUptmp.hta"
-        var fso = new ActiveXObject("Scripting.FileSystemObject");
+       var fileName = "popUptmp.hta";       
 
         var body = "<html>";
 
@@ -27,13 +27,16 @@ function createFolerDialogFile() {
         body += "</head>"
 
         body += "<body id='popUpBody'>";
+        body += "<div id='file-system'></div>"
         body += "</body>"
-
+        
         body += "<script>"
         body += "document.title='Выбрать директорию';resizeTo(800,500);moveTo(screen.width/2-400,screen.height/2-250);";
         body += "var body = document.getElementById('popUpBody');"
         body += "body.innerHTML = '<h1>Выбор папки</h1>';"
 
+          
+        
         body += "</script>"
 
         body += "</html>"
@@ -50,3 +53,56 @@ function createFolerDialogFile() {
         return null;
     }
 }
+
+createFileSystemHTML("C:\\");    
+
+function createFileSystemHTML(path) {
+    var data = getFileSystemData(path)
+    
+    var fileSystemContainer = document.getElementById('file-system');   
+    fileSystemContainer.innerHTML = "<input  type='button' class='btn btn-primary folder' value='" + data.name + "'/>";
+    
+    if (data.children.length) {
+        for (var i=0; i < data.children.length; i++ ) {
+            fileSystemContainer.innerHTML += "<div class='subFolder'><input  type='button' class='btn btn-secondary plusBtn' value='+' onclick='createFileSystemHTML(\"" + data.children[i].path + "\")'/>" + data.children[i].name + "</div>";            
+        }
+        
+    }  
+}
+
+function getFileSystemData(path) {    
+    try {  
+          //тут ошибка, в пути пропадает слеш           
+        var folder = fso.GetFolder(path);         
+        
+        return parseFolder(folder);
+    } catch (e) {
+        alert("Ошибка: " + e.message);
+        return null;
+    }
+}
+
+function parseFolder(folder) {    
+    
+    var data = {        
+        name: folder.Name || folder.Drive, 
+        path: folder.Path,                
+        children: []
+    };
+    
+    
+    // Добавляем подпапки
+    var subFolders = new Enumerator(folder.subFolders);
+    for (; !subFolders.atEnd(); subFolders.moveNext()) {
+        var subFolder = subFolders.item();
+        data.children.push({
+            name: subFolder.Name,            
+            path: subFolder.Path                         
+        });
+        
+    }
+
+    return data;
+}
+
+

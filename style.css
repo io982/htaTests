@@ -1,3 +1,14 @@
 .container {
     margin-top: 2em;
 }
+.subFolder {
+    margin-left: 1em;
+    margin-top: 0.1em;
+}
+.folder {
+    font-weight: bold;
+    width: 100%;
+}
+.plusBtn {
+    width: 2em;
+}
