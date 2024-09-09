@@ -64,17 +64,17 @@ function createFileSystemHTML(path) {
     
     if (data.children.length) {
         for (var i=0; i < data.children.length; i++ ) {
-            fileSystemContainer.innerHTML += "<div class='subFolder'><input  type='button' class='btn btn-secondary plusBtn' value='+' onclick='createFileSystemHTML(\"" + data.children[i].path + "\")'/>" + data.children[i].name + "</div>";            
+            fileSystemContainer.innerHTML += "<div class='subFolder'><input  type='button' class='btn btn-secondary plusBtn' value='+' onclick='createFileSystemHTML(\"" + data.children[i].path.join("\\\\") + "\")'/>" + data.children[i].name + "</div>";            
         }
         
     }  
 }
 
 function getFileSystemData(path) {    
-    try {  
-          //тут ошибка, в пути пропадает слеш           
+    try {       
         var folder = fso.GetFolder(path);         
-        
+        alert(path)
+        alert(folder.Path)
         return parseFolder(folder);
     } catch (e) {
         alert("Ошибка: " + e.message);
@@ -97,11 +97,11 @@ function parseFolder(folder) {
         var subFolder = subFolders.item();
         data.children.push({
             name: subFolder.Name,            
-            path: subFolder.Path                         
+            path: subFolder.Path.split("\\")                                    
         });
         
     }
-
+    
     return data;
 }
 
