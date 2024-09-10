@@ -54,6 +54,19 @@ function createFolerDialogFile() {
     }
 }
 
+/*test part. put into createFolerDialogFile aftrer test*/
+var drives = [];
+var ds = new Enumerator(fso.Drives);
+    for (; !ds.atEnd(); ds.moveNext()) {
+        var drive = ds.item();
+        drives.push({
+            name: drive.DriveLetter,
+            type: drive.DriveType,
+            shareName: drive.ShareName,
+            volumeName: drive.VolumeName
+        });        
+    }
+
 createFileSystemHTML("C:\\");    
 
 function createFileSystemHTML(path) {
@@ -72,9 +85,8 @@ function createFileSystemHTML(path) {
 
 function getFileSystemData(path) {    
     try {       
-        var folder = fso.GetFolder(path);         
-        alert(path)
-        alert(folder.Path)
+        var folder = fso.GetFolder(path); 
+
         return parseFolder(folder);
     } catch (e) {
         alert("Ошибка: " + e.message);
@@ -87,7 +99,8 @@ function parseFolder(folder) {
     var data = {        
         name: folder.Name || folder.Drive, 
         path: folder.Path,                
-        children: []
+        children: [],
+        drives: []
     };
     
     
@@ -101,8 +114,9 @@ function parseFolder(folder) {
         });
         
     }
-    
+       
+
     return data;
 }
-
+/* end test part. put into createFolerDialogFile aftrer test*/
 
