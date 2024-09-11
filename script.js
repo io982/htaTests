@@ -23,17 +23,26 @@ function createFolerDialogFile() {
         var body = "<html>";
 
         body += "<head>"
+        body += "<hta:application border='thin' caption='yes' maximizeButton='no' minimizeButton='yes' showInTaskbar='yes' singleInstance='yes' sysMenu='yes' windowState='normal' scroll='no'/>"
         body += "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css' integrity='sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N' crossorigin='anonymous'></link>"
-        body += "</head>"
+        body += "<style>";
+            body += "#file-system {height: 10em; overflow-y: scroll;}";
+            body += ".subFolder {margin-left: 1em; margin-top: 0.1em;}";
+            body += ".folder {font-weight: bold; width: 100%;}";
+            body += ".plusBtn {width: 2em;}"
+            body += ".reqBtn {width: 8em; margin: 1em; float: right;}"
+        body += "</style>";
+        body += "</head>";
 
-        body += "<body id='popUpBody'>";
-        body += "<div id='file-system'></div>"
+        body += "<body>";
+        body += "<div class='container'><h4>Выберите папку установки</h4></div>"
+        body += "<div class='container' id='file-system'></div>"
+        body += "<div class='container'><input type='button' class='btn btn-secondary reqBtn' value='cancel'/><input type='button' class='btn btn-primary reqBtn' value='ok'/></div>"
         body += "</body>"
         
         body += "<script>"
-        body += "document.title='Выбрать директорию';resizeTo(800,500);moveTo(screen.width/2-400,screen.height/2-250);";
-        body += "var body = document.getElementById('popUpBody');"
-        body += "body.innerHTML = '<h1>Выбор папки</h1>';"
+        body += "document.title='Выберите папку установки';resizeTo(800,500);moveTo(screen.width/2-400,screen.height/2-250);";
+        
 
           
         
@@ -55,29 +64,20 @@ function createFolerDialogFile() {
 }
 
 /*test part. put into createFolerDialogFile aftrer test*/
-var drives = [];
-var ds = new Enumerator(fso.Drives);
-    for (; !ds.atEnd(); ds.moveNext()) {
-        var drive = ds.item();
-        drives.push({
-            name: drive.DriveLetter + ":\\",
-            type: drive.DriveType,
-            shareName: drive.ShareName
-           
-        });
-       
-        
-             
-    }
+
     
 createFileSystemHTML("C:\\");    
 
 
-function createFileSystemHTML(path) {
-    var data = getFileSystemData(path)
-    
-    var fileSystemContainer = document.getElementById('file-system');   
-    fileSystemContainer.innerHTML = "<div class='folder'><input  type='button' class='btn btn-primary plusBtn' value='../' onclick='goUpFolder(\"" + data.path + "\", \"" + data.type +"\")'/> " + data.name + "</div>";
+function createFileSystemHTML(path, data) {
+    var fileSystemContainer = document.getElementById('file-system'); 
+    if (!data) {
+        var data = getFileSystemData(path);
+        
+        fileSystemContainer.innerHTML = "<div class='folder'><input  type='button' class='btn btn-primary plusBtn' value='../' onclick='goUpFolder(\"" + data.path.join("\\\\") + "\"," + data.type + ")'/>" + data.name + "</div>"; 
+    } else {
+        fileSystemContainer.innerHTML = "<div class='folder'>Computer</div>"; 
+    }
     
     if (data.children.length) {
         for (var i=0; i < data.children.length; i++ ) {
@@ -85,6 +85,7 @@ function createFileSystemHTML(path) {
         }
         
     }  
+    
 }
 
 
@@ -103,7 +104,7 @@ function parseFolder(folder) {
     
     var data = {        
         name: folder.Name || folder.Drive, 
-        path: folder.Path,
+        path: folder.Path.split('\\'),
         type: folder.Name ? 1 : 0,
         children: []
         
@@ -126,9 +127,27 @@ function parseFolder(folder) {
 }
 
 function goUpFolder(path, type) {
+    
     if (type == 1) {
-        createFileSystemHTML(path + '\\../')
+        createFileSystemHTML(path + '\\../');
     }
+    if (type == 0) {
+        var data = {
+            children: []
+        };
+        
+        var ds = new Enumerator(fso.Drives);
+        for (; !ds.atEnd(); ds.moveNext()) {
+            var drive = ds.item();
+            data.children.push({
+                path: (drive.DriveLetter + ":\\").split('\\'),
+                name: drive.ShareName || drive.DriveLetter
+           
+            });  
+        }
+        createFileSystemHTML("",data);
+    }
+    
 }
 /* end test part. put into createFolerDialogFile aftrer test*/
 

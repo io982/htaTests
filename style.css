@@ -12,3 +12,7 @@
 .plusBtn {
     width: 2em;
 }
+#file-system {
+    height: 10em;
+    overflow-y: scroll;
+}
