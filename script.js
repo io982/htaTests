@@ -60,20 +60,24 @@ var ds = new Enumerator(fso.Drives);
     for (; !ds.atEnd(); ds.moveNext()) {
         var drive = ds.item();
         drives.push({
-            name: drive.DriveLetter,
+            name: drive.DriveLetter + ":\\",
             type: drive.DriveType,
-            shareName: drive.ShareName,
-            volumeName: drive.VolumeName
-        });        
+            shareName: drive.ShareName
+           
+        });
+       
+        
+             
     }
-
+    
 createFileSystemHTML("C:\\");    
+
 
 function createFileSystemHTML(path) {
     var data = getFileSystemData(path)
     
     var fileSystemContainer = document.getElementById('file-system');   
-    fileSystemContainer.innerHTML = "<input  type='button' class='btn btn-primary folder' value='" + data.name + "'/>";
+    fileSystemContainer.innerHTML = "<div class='folder'><input  type='button' class='btn btn-primary plusBtn' value='../' onclick='goUpFolder(\"" + data.path + "\", \"" + data.type +"\")'/> " + data.name + "</div>";
     
     if (data.children.length) {
         for (var i=0; i < data.children.length; i++ ) {
@@ -82,6 +86,7 @@ function createFileSystemHTML(path) {
         
     }  
 }
+
 
 function getFileSystemData(path) {    
     try {       
@@ -98,10 +103,11 @@ function parseFolder(folder) {
     
     var data = {        
         name: folder.Name || folder.Drive, 
-        path: folder.Path,                
-        children: [],
-        drives: []
-    };
+        path: folder.Path,
+        type: folder.Name ? 1 : 0,
+        children: []
+        
+    };    
     
     
     // Добавляем подпапки
@@ -110,13 +116,19 @@ function parseFolder(folder) {
         var subFolder = subFolders.item();
         data.children.push({
             name: subFolder.Name,            
-            path: subFolder.Path.split("\\")                                    
+            path: subFolder.Path.split('\\')                                    
         });
         
     }
        
 
     return data;
+}
+
+function goUpFolder(path, type) {
+    if (type == 1) {
+        createFileSystemHTML(path + '\\../')
+    }
 }
 /* end test part. put into createFolerDialogFile aftrer test*/
 
