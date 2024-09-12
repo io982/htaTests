@@ -7,8 +7,22 @@ moveTo(screen.width / 2 - WINDOWWIDTH / 2, screen.height / 2 - WINDOWHEIGHT / 2)
 var shell = new ActiveXObject("WScript.Shell");
 var fso = new ActiveXObject("Scripting.FileSystemObject");
 
-var pathBtn = document.getElementById('choosePath')
+var pathOfInstall = shell.Environment("User")('hta001path');
+var pathBtn = document.getElementById('choosePath');
+var targetPath = document.getElementById('targetPath');
+
+if (pathOfInstall) {
+    targetPath.value = pathOfInstall;
+} else {
+    openD();
+}
+
+
+
+
 pathBtn.onclick = openD;
+
+
 
 function openD() {    
     
@@ -42,9 +56,9 @@ function createFolerDialogFile() {
         
         body += "<script>"
         body += "document.title='Выберите папку установки';resizeTo(800,500);moveTo(screen.width/2-400,screen.height/2-250);";
-        
-
-          
+        body += "var shell = new ActiveXObject('WScript.Shell');"
+        body += "var pathOfInstall = shell.Environment('User')('hta001path');"
+        body += "alert(pathOfInstall ? 1 : 0)"
         
         body += "</script>"
 
