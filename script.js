@@ -26,7 +26,7 @@ function createFolerDialogFile() {
         body += "<hta:application border='thin' caption='yes' maximizeButton='no' minimizeButton='yes' showInTaskbar='yes' singleInstance='yes' sysMenu='yes' windowState='normal' scroll='no'/>"
         body += "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css' integrity='sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N' crossorigin='anonymous'></link>"
         body += "<style>";
-            body += "#file-system {height: 10em; overflow-y: scroll;}";
+            body += "#file-system {height: 23em; overflow-y: scroll;}";
             body += ".subFolder {margin-left: 1em; margin-top: 0.1em;}";
             body += ".folder {font-weight: bold; width: 100%;}";
             body += ".plusBtn {width: 2em;}"
