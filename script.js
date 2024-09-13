@@ -11,14 +11,12 @@ var pathOfInstall = shell.Environment("User")('hta001path');
 var pathBtn = document.getElementById('choosePath');
 var targetPath = document.getElementById('targetPath');
 
+
 if (pathOfInstall) {
     targetPath.value = pathOfInstall;
 } else {
     openD();
 }
-
-
-
 
 pathBtn.onclick = openD;
 
@@ -58,10 +56,21 @@ function createFolerDialogFile() {
         body += "document.title='Выберите папку установки';resizeTo(800,500);moveTo(screen.width/2-400,screen.height/2-250);";
         body += "var shell = new ActiveXObject('WScript.Shell');"
         body += "var pathOfInstall = shell.Environment('User')('hta001path');"
-        body += "alert(pathOfInstall ? 1 : 0)"
+        //body += "if (pathOfInstall) {createFileSystemHTML(pathOfInstall.split('\\').join('\\\\'));} else {createFileSystemHTML('C:\\');}"
+       
+        body += "function createFileSystemHTML(path, data) {"
+        body += "var fileSystemContainer = document.getElementById('file-system');"
+        body += "if (!data) {"
+        body += "var data = getFileSystemData(path);"
+        body += "fileSystemContainer.innerHTML = \"<div class='folder'><input  type='button' class='btn btn-primary plusBtn' value='../' onclick='goUpFolder(\\\"\" + data.path.join(\"\\\\\\\\\") + \"\\\",\" + data.type + \")'/>\" + data.name + \"</div>\"; "
+        body += "} else {  fileSystemContainer.innerHTML = \"<div class='folder'>Computer</div>\";}"
+        body += "if (data.children.length) {"
+        body += "for (var i=0; i < data.children.length; i++ ) {"
+        body += "fileSystemContainer.innerHTML += \"<div class='subFolder'><input  type='button' class='btn btn-secondary plusBtn' value='+' onclick='createFileSystemHTML(\\\"\" + data.children[i].path.join(\"\\\\\\\\\") + \"\\\")'/>\" + data.children[i].name + \"</div>\";" 
+        body += "}}}"
         
         body += "</script>"
-
+        
         body += "</html>"
 
         var tempFile = fso.GetSpecialFolder(2) + "\\" + fileName;
