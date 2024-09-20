@@ -49,19 +49,24 @@ function createFolerDialogFile() {
         body += "<body>";
         body += "<div class='container'><h4>Выберите папку установки</h4></div>";
         body += "<div class='container' id='file-system'></div>";
-        body += "<div class='container'><input type='button' class='btn btn-secondary reqBtn' value='cancel'/><input type='button' class='btn btn-primary reqBtn' value='ok'/></div>";
+        body += "<div class='container'><input type='button' class='btn btn-secondary reqBtn' value='cancel' id='cnlBtn'/><input type='button' class='btn btn-primary reqBtn' value='ok' id='okBtn'/></div>";
         body += "</body>";
         
         body += "<script>";
         body += "document.title='Выберите папку установки';resizeTo(800,500);moveTo(screen.width/2-400,screen.height/2-250);";
         body += "var shell = new ActiveXObject('WScript.Shell');";
-        body += "var fso = new ActiveXObject('Scripting.FileSystemObject');"
+        body += "var fso = new ActiveXObject('Scripting.FileSystemObject');";
         body += "var pathOfInstall = shell.Environment('User')('hta001path');";
-        
+        body += "var okBtn = document.getElementById('okBtn');";
+        body += "var clBtn = document.getElementById('cnlBtn');";
+
+        body += "clBtn.onclick = function cl() {close();};";
+        body += "okBtn.onclick = function ok() {shell.Environment('User')('hta001path') = pathOfInstall; close();};";
+
         body += " if (pathOfInstall) {createFileSystemHTML(pathOfInstall.split('\\\\').join('\\\\\\\\'));} else {createFileSystemHTML('C:\\\\');}";       
-        //body += "createFileSystemHTML('C:\\\\'); "; 
-        
-        body += "function createFileSystemHTML(path, data) {";
+            
+        body += "function createFileSystemHTML(path, data) {"; 
+        body += "pathOfInstall = path;"       
         body += "var fileSystemContainer = document.getElementById('file-system');";
         body += "if (!data) {";
         body += "var data = getFileSystemData(path);";
