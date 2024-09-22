@@ -54,7 +54,7 @@ function createFolerDialogFile() {
         body += "</body>";
         
         body += "<script>";
-        body += "document.title='Выберите папку установки';resizeTo(800,500);moveTo(screen.width/2-400,screen.height/2-250);";
+        body += "document.title='Выберите папку установки';resizeTo(600,500);moveTo(screen.width/2-300,screen.height/2-250);";
         body += "var shell = new ActiveXObject('WScript.Shell');";
         body += "var fso = new ActiveXObject('Scripting.FileSystemObject');";
         body += "var pathOfInstall = shell.Environment('User')('hta001path');";
@@ -71,7 +71,7 @@ function createFolerDialogFile() {
         body += "var fileSystemContainer = document.getElementById('file-system');";
         body += "if (!data) {";
         body += "var data = getFileSystemData(path);";
-        body += "fileSystemContainer.innerHTML = \"<div class='folder'><input  type='button' class='btn btn-primary plusBtn' value='../' onclick='goUpFolder(\\\"\" + data.path.join(\"\\\\\\\\\") + \"\\\",\" + data.type + \")'/>\" + data.name + \"</div>\"; ";
+        body += "fileSystemContainer.innerHTML = \"<div class='folder'><input  type='button' class='btn btn-primary plusBtn' value='../' onclick='goUpFolder(\\\"\" + data.path.join(\"\\\\\\\\\") + \"\\\",\" + data.type + \")'/>\" + data.path.join(\"\\\\\") + \"</div>\"; ";
         body += "} else {  fileSystemContainer.innerHTML = \"<div class='folder'>Computer</div>\";}";
         body += "if (data.children.length) {";
         body += "for (var i=0; i < data.children.length; i++ ) {";
