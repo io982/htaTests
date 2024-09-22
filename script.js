@@ -11,7 +11,6 @@ var pathOfInstall = shell.Environment("User")('hta001path');
 var pathBtn = document.getElementById('choosePath');
 var targetPath = document.getElementById('targetPath');
 
-
 if (pathOfInstall) {
     targetPath.value = pathOfInstall;
 } else {
@@ -25,7 +24,9 @@ pathBtn.onclick = openD;
 function openD() {    
     
     var fileName = createFolerDialogFile();  
-    shell.Run("%TMP%/" + fileName,1,true);         
+    shell.Run("%TMP%/" + fileName,1,true);
+    pathOfInstall = shell.Environment("User")('hta001path');
+    targetPath.value = pathOfInstall;         
 }
 
 function createFolerDialogFile() {
@@ -66,7 +67,7 @@ function createFolerDialogFile() {
         body += " if (pathOfInstall) {createFileSystemHTML(pathOfInstall.split('\\\\').join('\\\\\\\\'));} else {createFileSystemHTML('C:\\\\');}";       
             
         body += "function createFileSystemHTML(path, data) {"; 
-        body += "pathOfInstall = path;"       
+        body += "pathOfInstall = path;";       
         body += "var fileSystemContainer = document.getElementById('file-system');";
         body += "if (!data) {";
         body += "var data = getFileSystemData(path);";
