@@ -4,8 +4,13 @@ var test = 101;
 resizeTo(WINDOWWIDTH, WINDOWHEIGHT);
 moveTo(screen.width / 2 - WINDOWWIDTH / 2, screen.height / 2 - WINDOWHEIGHT / 2)
 
-var shell = new ActiveXObject("WScript.Shell");
-var fso = new ActiveXObject("Scripting.FileSystemObject");
+try {
+    var shell = new ActiveXObject("WScript.Shell");
+    var fso = new ActiveXObject("Scripting.FileSystemObject");
+} catch(e) {
+    alert("Ошибка: " + e.message);
+    close();        
+}
 
 var pathOfInstall = shell.Environment("User")('hta001path');
 var pathBtn = document.getElementById('choosePath');
@@ -15,15 +20,14 @@ var crtBtn = document.getElementById('create');
 if (pathOfInstall) {
     targetPath.value = pathOfInstall;
 } else {
-    openD();
+    targetPath.value = "";
 }
 
 pathBtn.onclick = openD;
 crtBtn.onclick = createFolder;
 
 
-function openD() {    
-    
+function openD() {
     var fileName = createFolerDialogFile();  
     shell.Run("%TMP%/" + fileName,1,true);
     pathOfInstall = shell.Environment("User")('hta001path');
@@ -110,15 +114,32 @@ function createFolerDialogFile() {
 }
 
 function createFolder() {
-    var orderNum = document.getElementById('orderNum');
-    var customer = document.getElementById('customer');
-    var name = document.getElementById('name');
-    var bpNum = document.getElementById('bpNum');
+    try {
 
-    if ((/[A-ZА-Я0-9\.\_\-()]*/gi).test(orderNum.value)) {
+    
+    if (!targetPath.value) {
+        openD();
+    } 
+    var orderNum = document.getElementById('orderNum');
+    var customer = document.getElementById('customer').value;
+    var name = document.getElementById('name').value;
+    var bpNum = document.getElementById('bpNum').value;
+
+    if ((/[A-ZА-Я0-9\.\_\-()]+/gi).test(orderNum.value)) {        
+        var newPath = targetPath.value;   
+        newPath += '\\'+ orderNum.value;
+        newPath += customer ? ' ' + customer : '';
+        newPath += name ? ' ' + name : '';
+        newPath += bpNum ? ' ' + bpNum : '';
+        fso.createFolder(newPath);
+        alert('папка создана');
 
     } else {
-        alert('введите номер запроса\nдопустимые символы: A-Z А-Я 0-9 \. \_ \- ( )')
+        alert('введите номер запроса\nдопустимые символы: A-Z А-Я 0-9 \. \_ \- ( )');
+    }
+
+    } catch(e) {
+        alert("Ошибка: " + e.message);        
     }
 }
 
