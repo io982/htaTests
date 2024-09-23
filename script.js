@@ -10,6 +10,7 @@ var fso = new ActiveXObject("Scripting.FileSystemObject");
 var pathOfInstall = shell.Environment("User")('hta001path');
 var pathBtn = document.getElementById('choosePath');
 var targetPath = document.getElementById('targetPath');
+var crtBtn = document.getElementById('create');
 
 if (pathOfInstall) {
     targetPath.value = pathOfInstall;
@@ -18,7 +19,7 @@ if (pathOfInstall) {
 }
 
 pathBtn.onclick = openD;
-
+crtBtn.onclick = createFolder;
 
 
 function openD() {    
@@ -108,5 +109,17 @@ function createFolerDialogFile() {
     }
 }
 
+function createFolder() {
+    var orderNum = document.getElementById('orderNum');
+    var customer = document.getElementById('customer');
+    var name = document.getElementById('name');
+    var bpNum = document.getElementById('bpNum');
+
+    if ((/[A-ZА-Я0-9\.\_\-()]*/gi).test(orderNum.value)) {
+
+    } else {
+        alert('введите номер запроса\nдопустимые символы: A-Z А-Я 0-9 \. \_ \- ( )')
+    }
+}
 
 
