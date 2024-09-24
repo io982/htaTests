@@ -131,7 +131,32 @@ function createFolder() {
         newPath += customer ? ' ' + customer : '';
         newPath += name ? ' ' + name : '';
         newPath += bpNum ? ' ' + bpNum : '';
-        fso.createFolder(newPath);
+        
+        // fso.createFolder(newPath);        
+        // fso.createFolder(fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ'));
+        // fso.createFolder(fso.buildPath(fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ'), 'ÎÌÒÑ'));
+        // fso.createFolder(fso.buildPath(fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ'), 'ÍÎĞÌÈĞÎÂÀÍÈÅ'));
+        // fso.createFolder(fso.buildPath(newPath, '02 ×ÅĞÒÅÆÈ'));
+        // fso.createFolder(fso.buildPath(fso.buildPath(newPath, '02 ×ÅĞÒÅÆÈ'), 'İÑÊÈÇÛ'));
+        // fso.createFolder(fso.buildPath(newPath, '03 ÒÇ'));
+        // fso.createFolder(fso.buildPath(newPath, '04 ÒÅÕÏĞÎÖÅÑÑ'));
+        // fso.createFolder(fso.buildPath(newPath, '05 ÇÀÏÓÑÊ'));
+        // fso.createFolder(fso.buildPath(fso.buildPath(newPath, '05 ÇÀÏÓÑÊ'), 'ÎÌÒÑ'));
+        // fso.createFolder(fso.buildPath(fso.buildPath(newPath, '05 ÇÀÏÓÑÊ'), 'ÍÎĞÌÈĞÎÂÀÍÈÅ'));
+        var folder = fso.GetFolder("\\\\nas\\ÎÃÒ\\ÌÒÖ\\");
+        var files = new Enumerator(folder.files);        
+        for (; !files.atEnd(); files.moveNext()) {
+            var file = files.item();
+            if (file.Name.indexOf('Îáğàçåö ïîëíûé') !== -1) {
+                alert(file.Path);
+                fso.copyFile(file.Path, fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ'));
+                break;
+            }
+        }
+
+        
+        fso.copyFile('\\\\nas\\ÌÒÖ\\Îáğàçåö ïîëíûé*.xlsm', fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ'));
+
         alert('ïàïêà ñîçäàíà');
 
     } else {
