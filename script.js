@@ -143,19 +143,21 @@ function createFolder() {
         // fso.createFolder(fso.buildPath(newPath, '05 ÇÀÏÓÑÊ'));
         // fso.createFolder(fso.buildPath(fso.buildPath(newPath, '05 ÇÀÏÓÑÊ'), 'ÎÌÒÑ'));
         // fso.createFolder(fso.buildPath(fso.buildPath(newPath, '05 ÇÀÏÓÑÊ'), 'ÍÎĞÌÈĞÎÂÀÍÈÅ'));
-        var folder = fso.GetFolder("\\\\nas\\ÎÃÒ\\ÌÒÖ\\");
+        
+        var folder = fso.GetFolder(targetPath.value);
+        //var folder = fso.GetFolder("\\\\nas\\ÎÃÒ\\ÌÒÖ");
         var files = new Enumerator(folder.files);        
         for (; !files.atEnd(); files.moveNext()) {
             var file = files.item();
-            if (file.Name.indexOf('Îáğàçåö ïîëíûé') !== -1) {
-                alert(file.Path);
-                fso.copyFile(file.Path, fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ'));
+            if (file.Name.indexOf('Îáğàçåö ïîëíûé') !== -1) {   
+                alert(file.path)             
+                fso.copyFile(file.path, fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ'));
                 break;
             }
         }
 
         
-        fso.copyFile('\\\\nas\\ÌÒÖ\\Îáğàçåö ïîëíûé*.xlsm', fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ'));
+        //fso.copyFile('\\\\nas\\ÌÒÖ\\Îáğàçåö ïîëíûé*.xlsm', fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ'));
 
         alert('ïàïêà ñîçäàíà');
 
