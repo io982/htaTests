@@ -1,3 +1,4 @@
+var PATHTOSAMPLE = "\\\\nas\\нцр\\лрж";
 var WINDOWWIDTH = 400;
 var WINDOWHEIGHT = 400;
 var test = 101;
@@ -131,31 +132,30 @@ function createFolder() {
         newPath += customer ? ' ' + customer : '';
         newPath += name ? ' ' + name : '';
         newPath += bpNum ? ' ' + bpNum : '';
+       
+        fso.createFolder(newPath);        
+        fso.createFolder(fso.buildPath(newPath, '01 опедпюявер'));
+        fso.createFolder(fso.buildPath(fso.buildPath(newPath, '01 опедпюявер'), 'нлря'));
+        fso.createFolder(fso.buildPath(fso.buildPath(newPath, '01 опедпюявер'), 'мнплхпнбюмхе'));
+        fso.createFolder(fso.buildPath(newPath, '02 вепрефх'));
+        fso.createFolder(fso.buildPath(fso.buildPath(newPath, '02 вепрефх'), 'щяйхгш'));
+        fso.createFolder(fso.buildPath(newPath, '03 рг'));
+        fso.createFolder(fso.buildPath(newPath, '04 реуопнжеяя'));
+        fso.createFolder(fso.buildPath(newPath, '05 гюосяй'));
+        fso.createFolder(fso.buildPath(fso.buildPath(newPath, '05 гюосяй'), 'нлря'));
+        fso.createFolder(fso.buildPath(fso.buildPath(newPath, '05 гюосяй'), 'мнплхпнбюмхе'));
         
-        // fso.createFolder(newPath);        
-        // fso.createFolder(fso.buildPath(newPath, '01 опедпюявер'));
-        // fso.createFolder(fso.buildPath(fso.buildPath(newPath, '01 опедпюявер'), 'нлря'));
-        // fso.createFolder(fso.buildPath(fso.buildPath(newPath, '01 опедпюявер'), 'мнплхпнбюмхе'));
-        // fso.createFolder(fso.buildPath(newPath, '02 вепрефх'));
-        // fso.createFolder(fso.buildPath(fso.buildPath(newPath, '02 вепрефх'), 'щяйхгш'));
-        // fso.createFolder(fso.buildPath(newPath, '03 рг'));
-        // fso.createFolder(fso.buildPath(newPath, '04 реуопнжеяя'));
-        // fso.createFolder(fso.buildPath(newPath, '05 гюосяй'));
-        // fso.createFolder(fso.buildPath(fso.buildPath(newPath, '05 гюосяй'), 'нлря'));
-        // fso.createFolder(fso.buildPath(fso.buildPath(newPath, '05 гюосяй'), 'мнплхпнбюмхе'));
-        
-        var folder = fso.GetFolder(targetPath.value);
-        //var folder = fso.GetFolder("\\\\nas\\нцр\\лрж");
+        var folder = fso.GetFolder(PATHTOSAMPLE);
         var files = new Enumerator(folder.files);        
         for (; !files.atEnd(); files.moveNext()) {
             var file = files.item();
-            if (file.Name.indexOf('нАПЮГЕЖ ОНКМШИ') !== -1) {   
-                alert(file.path)             
-                fso.copyFile(file.path, fso.buildPath(newPath, '01 опедпюявер'));
+            if (file.Name.indexOf('нАПЮГЕЖ ОНКМШИ') !== -1) {                 
+                shell.Run('powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '01 опедпюявер') + '\'"', 0, true);
+                fso.GetFile(fso.buildPath(newPath, '01 опедпюявер') + "\\" + file.Name).name = orderNum.value + ' ' + customer + ' ' + name + ' ' + bpNum + '.xlsm';
                 break;
             }
         }
-
+        
         
         //fso.copyFile('\\\\nas\\лрж\\нАПЮГЕЖ ОНКМШИ*.xlsm', fso.buildPath(newPath, '01 опедпюявер'));
 
