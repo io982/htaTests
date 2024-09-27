@@ -129,9 +129,9 @@ function createFolder() {
     if ((/[A-ZÀ-ß0-9\.\_\-()]+/gi).test(orderNum.value)) {        
         var newPath = targetPath.value;   
         newPath += '\\'+ orderNum.value;
-        newPath += customer ? ' ' + customer : '';
-        newPath += name ? ' ' + name : '';
-        newPath += bpNum ? ' ' + bpNum : '';
+        if (customer) {newPath += customer;} 
+        if (name) {newPath += name;} 
+        if (bpNum) {newPath += bpNum;} 
        
         fso.createFolder(newPath);        
         fso.createFolder(fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ'));
@@ -149,8 +149,9 @@ function createFolder() {
         var files = new Enumerator(folder.files);        
         for (; !files.atEnd(); files.moveNext()) {
             var file = files.item();
-            if (file.Name.indexOf('Îáğàçåö ïîëíûé') !== -1) {                 
-                shell.Run('powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ') + '\'"', 0, true);
+            if (file.Name.indexOf('Îáğàçåö ïîëíûé') !== -1) {
+                var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ') + '\'"';                 
+                shell.Run(command, 0, true);
                 fso.GetFile(fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ') + "\\" + file.Name).name = orderNum.value + ' ' + customer + ' ' + name + ' ' + bpNum + '.xlsm';
                 break;
             }
