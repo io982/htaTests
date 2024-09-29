@@ -1,5 +1,6 @@
 //var PATHTOSAMPLE = "\\\\nas\\ОГТ\\МТЦ";
 var PATHTOSAMPLE = "E:\\Downloads";
+var PATHTOORDERS = ["E:\\Downloads"];
 var WINDOWWIDTH = 400;
 var WINDOWHEIGHT = 400;
 var test = 101;
@@ -138,7 +139,6 @@ function createFolder() {
         if (bpNum) { newName += ' ' + bpNum; } 
         newPath += '\\'+ newName;
        
-        
         fso.createFolder(newPath);        
         fso.createFolder(fso.buildPath(newPath, '01 ПРЕДРАСЧЕТ'));
         fso.createFolder(fso.buildPath(fso.buildPath(newPath, '01 ПРЕДРАСЧЕТ'), 'ОМТС'));
@@ -170,8 +170,20 @@ function createFolder() {
             }
         }
         
-        //var shortcut = shell.CreateShortcut(fso.buildPath(newPath, '06 Запрос.lnk'));
-        
+        var shortcut = shell.CreateShortcut(fso.buildPath(newPath, '06 Запрос.lnk'));        
+        for (var i = 0; i < PATHTOORDERS.length; i++) {
+            folder = fso.GetFolder(PATHTOORDERS[i]);
+            var subFolders = new Enumerator(folder.subFolders);
+            for (; !subFolders.atEnd(); subFolders.moveNext()) {
+                var j = subFolders.item();                
+                if (j.path.indexOf(orderNum.value) !== -1) {
+                    shortcut.targetPath = j.path;
+                    shortcut.save();                    
+                    break;
+                }
+            }
+
+        }
         
         alert('папка создана');
 
