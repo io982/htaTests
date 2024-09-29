@@ -139,6 +139,7 @@ function createFolder() {
         if (bpNum) { newName += ' ' + bpNum; } 
         newPath += '\\'+ newName;
        
+        //create new folders
         fso.createFolder(newPath);        
         fso.createFolder(fso.buildPath(newPath, '01 ПРЕДРАСЧЕТ'));
         fso.createFolder(fso.buildPath(fso.buildPath(newPath, '01 ПРЕДРАСЧЕТ'), 'ОМТС'));
@@ -151,6 +152,7 @@ function createFolder() {
         fso.createFolder(fso.buildPath(fso.buildPath(newPath, '05 ЗАПУСК'), 'ОМТС'));
         fso.createFolder(fso.buildPath(fso.buildPath(newPath, '05 ЗАПУСК'), 'НОРМИРОВАНИЕ'));
         
+        //copy files
         var folder = fso.GetFolder(PATHTOSAMPLE);
         var files = new Enumerator(folder.files);        
         for (; !files.atEnd(); files.moveNext()) {
@@ -170,7 +172,8 @@ function createFolder() {
             }
         }
         
-        var shortcut = shell.CreateShortcut(fso.buildPath(newPath, '06 Запрос.lnk'));        
+        //create links
+        var shortcut = shell.CreateShortcut(fso.buildPath(newPath, '06 Запрос.lnk'));            
         for (var i = 0; i < PATHTOORDERS.length; i++) {
             folder = fso.GetFolder(PATHTOORDERS[i]);
             var subFolders = new Enumerator(folder.subFolders);
@@ -184,7 +187,7 @@ function createFolder() {
             }
 
         }
-        
+        if (!shortcut.targetPath) {alert('запрос с таким номером не найден, ярлык не добвален')}
         alert('папка создана');
 
     } else {
