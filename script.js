@@ -1,9 +1,10 @@
 try {
     var shell = new ActiveXObject("WScript.Shell");
     var fso = new ActiveXObject("Scripting.FileSystemObject");
-} catch(e) {
+    var excel = new ActiveXObject("Excel.Application");
+} catch (e) {
     alert("Œ¯Ë·Í‡: " + e.message);
-    close();        
+    close();
 }
 
 var PATHTOSAMPLE = "\\\\nas\\Œ√“\\Ã“÷";
@@ -14,7 +15,7 @@ var date = new Date;
 var oderFolder = fso.GetFolder(fso.buildPath("\\\\nas\\«‡ÔÓÒ˚", date.getFullYear()));
 var subOderFolders = new Enumerator(oderFolder.subFolders);
 for (; !subOderFolders.atEnd(); subOderFolders.moveNext()) {
-    PATHTOORDERS.push = subOderFolders.item().path;
+    PATHTOORDERS.push(subOderFolders.item().path);
 }
 
 
@@ -42,15 +43,15 @@ crtBtn.onclick = createFolder;
 
 
 function openD() {
-    var fileName = createFolerDialogFile();  
-    shell.Run("%TMP%/" + fileName,1,true);
+    var fileName = createFolerDialogFile();
+    shell.Run("%TMP%/" + fileName, 1, true);
     pathOfInstall = shell.Environment("User")('hta001path');
-    targetPath.value = pathOfInstall;         
+    targetPath.value = pathOfInstall;
 }
 
 function createFolerDialogFile() {
     try {
-       var fileName = "popUptmp.hta";       
+        var fileName = "popUptmp.hta";
 
         var body = "<html>";
 
@@ -58,11 +59,11 @@ function createFolerDialogFile() {
         body += "<hta:application border='thin' caption='yes' maximizeButton='no' minimizeButton='yes' showInTaskbar='yes' singleInstance='yes' sysMenu='yes' windowState='normal' scroll='no'/>";
         body += "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css' integrity='sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N' crossorigin='anonymous'></link>";
         body += "<style>";
-            body += "#file-system {height: 23em; overflow-y: scroll;}";
-            body += ".subFolder {margin-left: 1em; margin-top: 0.1em;}";
-            body += ".folder {font-weight: bold; width: 100%;}";
-            body += ".plusBtn {width: 2em;}";
-            body += ".reqBtn {width: 8em; margin: 1em; float: right;}";
+        body += "#file-system {height: 23em; overflow-y: scroll;}";
+        body += ".subFolder {margin-left: 1em; margin-top: 0.1em;}";
+        body += ".folder {font-weight: bold; width: 100%;}";
+        body += ".plusBtn {width: 2em;}";
+        body += ".reqBtn {width: 8em; margin: 1em; float: right;}";
         body += "</style>";
         body += "</head>";
 
@@ -71,7 +72,7 @@ function createFolerDialogFile() {
         body += "<div class='container' id='file-system'></div>";
         body += "<div class='container'><input type='button' class='btn btn-secondary reqBtn' value='cancel' id='cnlBtn'/><input type='button' class='btn btn-primary reqBtn' value='ok' id='okBtn'/></div>";
         body += "</body>";
-        
+
         body += "<script>";
         body += "document.title='¬˚·ÂËÚÂ Ô‡ÔÍÛ ÛÒÚ‡ÌÓ‚ÍË';resizeTo(600,500);moveTo(screen.width/2-300,screen.height/2-250);";
         body += "var shell = new ActiveXObject('WScript.Shell');";
@@ -83,10 +84,10 @@ function createFolerDialogFile() {
         body += "clBtn.onclick = function cl() {close();};";
         body += "okBtn.onclick = function ok() {shell.Environment('User')('hta001path') = pathOfInstall; close();};";
 
-        body += " if (pathOfInstall) {createFileSystemHTML(pathOfInstall.split('\\\\').join('\\\\\\\\'));} else {createFileSystemHTML('C:\\\\');}";       
-            
-        body += "function createFileSystemHTML(path, data) {"; 
-        body += "pathOfInstall = path;";       
+        body += " if (pathOfInstall) {createFileSystemHTML(pathOfInstall.split('\\\\').join('\\\\\\\\'));} else {createFileSystemHTML('C:\\\\');}";
+
+        body += "function createFileSystemHTML(path, data) {";
+        body += "pathOfInstall = path;";
         body += "var fileSystemContainer = document.getElementById('file-system');";
         body += "if (!data) {";
         body += "var data = getFileSystemData(path);";
@@ -96,14 +97,14 @@ function createFolerDialogFile() {
         body += "for (var i=0; i < data.children.length; i++ ) {";
         body += "fileSystemContainer.innerHTML += \"<div class='subFolder'><input  type='button' class='btn btn-secondary plusBtn' value='+' onclick='createFileSystemHTML(\\\"\" + data.children[i].path.join(\"\\\\\\\\\") + \"\\\")'/>\" + data.children[i].name + \"</div>\";";
         body += "}}}";
-        
+
         body += "function getFileSystemData(path) { try { var folder = fso.GetFolder(path); return parseFolder(folder); } catch (e) { alert('Œ¯Ë·Í‡: ' + e.message); return null;}}";
-        
+
         body += "function parseFolder(folder) {";
         body += "var data = { name: folder.Name || folder.Drive, path: folder.Path.split('\\\\'), type: folder.Name ? 1 : 0, children: [] };";
         body += "var subFolders = new Enumerator(folder.subFolders); for (; !subFolders.atEnd(); subFolders.moveNext()) { var subFolder = subFolders.item(); data.children.push({ name: subFolder.Name, path: subFolder.Path.split('\\\\') });}";
         body += "return data;}";
-        
+
         body += "function goUpFolder(path, type) {";
         body += "if (type == 1) { createFileSystemHTML(path + '\\\\../'); }";
         body += " if (type == 0) { var data = { children: [] };";
@@ -111,7 +112,7 @@ function createFolerDialogFile() {
         body += "for (; !ds.atEnd(); ds.moveNext()) { var drive = ds.item(); data.children.push({ path: (drive.DriveLetter + ':\\\\').split('\\\\'), name: drive.ShareName || drive.DriveLetter });}";
         body += "createFileSystemHTML('',data); }}";
         body += "</script>";
-        
+
         body += "</html>";
 
         var tempFile = fso.GetSpecialFolder(2) + "\\" + fileName;
@@ -119,97 +120,104 @@ function createFolerDialogFile() {
         file.Write(body);
         file.Close();
 
-        return fileName;       
-    } catch (e) {        
+        return fileName;
+    } catch (e) {
         alert("Œ¯Ë·Í‡: " + e.message);
         return null;
     }
 }
 
 function createFolder() {
-    var styleSheet = document.styleSheets[0];    
+    var styleSheet = document.styleSheets[0];
     styleSheet.addRule('*', 'cursor: wait;');
-    
-    
-    
-    try {   
-    
-    if (!targetPath.value) {
-        openD();
-    } 
-    var orderNum = document.getElementById('orderNum');
-    var customer = document.getElementById('customer').value;
-    var name = document.getElementById('name').value;
-    var bpNum = document.getElementById('bpNum').value;
 
-    if ((/[A-Z¿-ﬂ0-9\.\_\-()]+/gi).test(orderNum.value)) {        
-        var newPath = targetPath.value;
-        var newName = orderNum.value;       
-        if (customer) { newName += ' ' + customer; } 
-        if (name) { newName += ' ' + name; } 
-        if (bpNum) { newName += ' ' + bpNum; } 
-        newPath += '\\'+ newName;
-       
-        //create new folders
-        fso.createFolder(newPath);        
-        fso.createFolder(fso.buildPath(newPath, '01 œ–≈ƒ–¿—◊≈“'));
-        fso.createFolder(fso.buildPath(fso.buildPath(newPath, '01 œ–≈ƒ–¿—◊≈“'), 'ŒÃ“—'));
-        fso.createFolder(fso.buildPath(fso.buildPath(newPath, '01 œ–≈ƒ–¿—◊≈“'), 'ÕŒ–Ã»–Œ¬¿Õ»≈'));
-        fso.createFolder(fso.buildPath(newPath, '02 ◊≈–“≈∆»'));
-        fso.createFolder(fso.buildPath(fso.buildPath(newPath, '02 ◊≈–“≈∆»'), '›— »«€'));
-        fso.createFolder(fso.buildPath(newPath, '03 “«'));
-        fso.createFolder(fso.buildPath(newPath, '04 “≈’œ–Œ÷≈——'));
-        fso.createFolder(fso.buildPath(newPath, '05 «¿œ”— '));
-        fso.createFolder(fso.buildPath(fso.buildPath(newPath, '05 «¿œ”— '), 'ŒÃ“—'));
-        fso.createFolder(fso.buildPath(fso.buildPath(newPath, '05 «¿œ”— '), 'ÕŒ–Ã»–Œ¬¿Õ»≈'));
-        
-        //copy files
-        var folder = fso.GetFolder(PATHTOSAMPLE);
-        var files = new Enumerator(folder.files);        
-        for (; !files.atEnd(); files.moveNext()) {
-            var file = files.item();
-            if (file.Name.indexOf('Œ·‡ÁÂˆ ÔÓÎÌ˚È') !== -1) {
-                var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '01 œ–≈ƒ–¿—◊≈“') + '\'"';                 
-                shell.Run(command, 0, true);                                
-                fso.GetFile(fso.buildPath(newPath, '01 œ–≈ƒ–¿—◊≈“') + "\\" + file.Name).name = newName + '.xlsm';                
-            }
-            if (file.Name.indexOf('“« ÿ‡·ÎÓÌ') !== -1) {
-                var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '03 “«') + '\'"';                 
-                shell.Run(command, 0, true);                                
-            }
-            if (file.Name.indexOf('Ã‡¯ÛÚ˚ ÿ‡·ÎÓÌ') !== -1) {
-                var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '04 “≈’œ–Œ÷≈——') + '\'"';                 
-                shell.Run(command, 0, true);                                
-            }
+    try {
+
+        if (!targetPath.value) {
+            openD();
         }
-        
-        //create links
-        var shortcut = shell.CreateShortcut(fso.buildPath(newPath, '06 «‡ÔÓÒ.lnk'));            
-        for (var i = 0; i < PATHTOORDERS.length; i++) {
-            folder = fso.GetFolder(PATHTOORDERS[i]);
-            var subFolders = new Enumerator(folder.subFolders);
-            for (; !subFolders.atEnd(); subFolders.moveNext()) {
-                var j = subFolders.item();                
-                if (j.path.indexOf(orderNum.value) !== -1) {
-                    shortcut.targetPath = j.path;
-                    shortcut.save();                    
-                    break;
+        var orderNum = document.getElementById('orderNum');
+        var customer = document.getElementById('customer').value;
+        var name = document.getElementById('name').value;
+        var bpNum = document.getElementById('bpNum').value;
+
+        if ((/[A-Z¿-ﬂ0-9\.\_\-()]+/gi).test(orderNum.value)) {
+            var newPath = targetPath.value;
+            var newName = orderNum.value;
+            if (customer) { newName += ' ' + customer; }
+            if (name) { newName += ' ' + name; }
+            if (bpNum) { newName += ' ' + bpNum; }
+            newPath += '\\' + newName;
+
+            //create new folders
+            fso.createFolder(newPath);
+            fso.createFolder(fso.buildPath(newPath, '01 œ–≈ƒ–¿—◊≈“'));
+            fso.createFolder(fso.buildPath(fso.buildPath(newPath, '01 œ–≈ƒ–¿—◊≈“'), 'ŒÃ“—'));
+            fso.createFolder(fso.buildPath(fso.buildPath(newPath, '01 œ–≈ƒ–¿—◊≈“'), 'ÕŒ–Ã»–Œ¬¿Õ»≈'));
+            fso.createFolder(fso.buildPath(newPath, '02 ◊≈–“≈∆»'));
+            fso.createFolder(fso.buildPath(fso.buildPath(newPath, '02 ◊≈–“≈∆»'), '›— »«€'));
+            fso.createFolder(fso.buildPath(newPath, '03 “«'));
+            fso.createFolder(fso.buildPath(newPath, '04 “≈’œ–Œ÷≈——'));
+            fso.createFolder(fso.buildPath(newPath, '05 «¿œ”— '));
+            fso.createFolder(fso.buildPath(fso.buildPath(newPath, '05 «¿œ”— '), 'ŒÃ“—'));
+            fso.createFolder(fso.buildPath(fso.buildPath(newPath, '05 «¿œ”— '), 'ÕŒ–Ã»–Œ¬¿Õ»≈'));
+
+            //copy files
+            var folder = fso.GetFolder(PATHTOSAMPLE);
+            var files = new Enumerator(folder.files);
+            for (; !files.atEnd(); files.moveNext()) {
+                var file = files.item();
+                if (file.Name.indexOf('Œ·‡ÁÂˆ ÔÓÎÌ˚È') !== -1) {
+                    var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '01 œ–≈ƒ–¿—◊≈“') + '\'"';
+                    shell.Run(command, 0, true);
+                    fso.GetFile(fso.buildPath(newPath, '01 œ–≈ƒ–¿—◊≈“') + "\\" + file.Name).name = newName + '.xlsm';
+                }
+                if (file.Name.indexOf('“« ÿ‡·ÎÓÌ') !== -1) {
+                    var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '03 “«') + '\'"';
+                    shell.Run(command, 0, true);
+                }
+                if (file.Name.indexOf('Ã‡¯ÛÚ˚ ÿ‡·ÎÓÌ') !== -1) {
+                    var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '04 “≈’œ–Œ÷≈——') + '\'"';
+                    shell.Run(command, 0, true);
                 }
             }
 
+            //create links
+            var shortcut = shell.CreateShortcut(fso.buildPath(newPath, '06 «‡ÔÓÒ.lnk'));
+            for (var i = 0; i < PATHTOORDERS.length; i++) {
+                folder = fso.GetFolder(PATHTOORDERS[i]);
+
+                var subFolders = new Enumerator(folder.subFolders);
+                for (; !subFolders.atEnd(); subFolders.moveNext()) {
+                    var j = subFolders.item();
+                    if (j.path.indexOf(orderNum.value) !== -1) {
+                        shortcut.targetPath = j.path;
+                        shortcut.save();
+                        break;
+                    }
+                }
+
+            }
+
+            //open excel
+            excel.Visible = true;
+            var workbook = excel.Workbooks.Open(fso.buildPath(fso.buildPath(newPath, '01 œ–≈ƒ–¿—◊≈“'), newName + '.xlsm'));
+            var sheet = workbook.Sheets(" ‡Î¸ÍÛÎˇˆËˇ");
+            sheet.Cells(1, 2).Value = orderNum.value;
+            sheet.Cells(2, 2).Value = customer;
+            sheet.Cells(11, 2).Value = name;
+            sheet.Cells(12, 2).Value = bpNum;
+            workbook.Save();
+
+            alert('Ô‡ÔÍ‡ ÒÓÁ‰‡Ì‡');
+
+        } else {
+            alert('‚‚Â‰ËÚÂ ÌÓÏÂ Á‡ÔÓÒ‡\n‰ÓÔÛÒÚËÏ˚Â ÒËÏ‚ÓÎ˚: A-Z ¿-ﬂ 0-9 \. \_ \- ( )');
         }
-        if (!shortcut.targetPath) {alert('Á‡ÔÓÒ Ò Ú‡ÍËÏ ÌÓÏÂÓÏ ÌÂ Ì‡È‰ÂÌ, ˇÎ˚Í ÌÂ ‰Ó·‚‡ÎÂÌ')}
-        alert('Ô‡ÔÍ‡ ÒÓÁ‰‡Ì‡');
 
-    } else {
-        alert('‚‚Â‰ËÚÂ ÌÓÏÂ Á‡ÔÓÒ‡\n‰ÓÔÛÒÚËÏ˚Â ÒËÏ‚ÓÎ˚: A-Z ¿-ﬂ 0-9 \. \_ \- ( )');
+    } catch (e) {
+        alert("Œ¯Ë·Í‡: " + e.message);
     }
+    styleSheet.removeRule(styleSheet.rules.length - 1);
 
-    } catch(e) {
-        alert("Œ¯Ë·Í‡: " + e.message);        
-    }
-    styleSheet.removeRule(styleSheet.rules.length - 1);            
-            
 }
-
-
