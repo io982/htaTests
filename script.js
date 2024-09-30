@@ -1,6 +1,17 @@
-//var PATHTOSAMPLE = "\\\\nas\\Œ√“\\Ã“÷";
-var PATHTOSAMPLE = "E:\\Downloads";
-var PATHTOORDERS = ["E:\\Downloads"];
+var PATHTOSAMPLE = "\\\\nas\\Œ√“\\Ã“÷";
+//var PATHTOSAMPLE = "E:\\Downloads";
+//var PATHTOORDERS = ["E:\\Downloads"];
+var PATHTOORDERS = [];
+var date = new Date;
+var oderFolder = fso.GetFolder("\\\\nas\\«‡ÔÓÒ˚\\");
+oderFolder += date.getFullYear();
+alert (oderFolder)
+var subOderFolders = new Enumerator(oderFolder.subFolders);
+for (; !subOderFolders.atEnd(); subOderFolders.moveNext()) {
+    
+}
+
+
 var WINDOWWIDTH = 400;
 var WINDOWHEIGHT = 400;
 var test = 101;
