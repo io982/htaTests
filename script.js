@@ -1,14 +1,20 @@
+try {
+    var shell = new ActiveXObject("WScript.Shell");
+    var fso = new ActiveXObject("Scripting.FileSystemObject");
+} catch(e) {
+    alert("Ошибка: " + e.message);
+    close();        
+}
+
 var PATHTOSAMPLE = "\\\\nas\\ОГТ\\МТЦ";
 //var PATHTOSAMPLE = "E:\\Downloads";
 //var PATHTOORDERS = ["E:\\Downloads"];
 var PATHTOORDERS = [];
 var date = new Date;
-var oderFolder = fso.GetFolder("\\\\nas\\Запросы\\");
-oderFolder += date.getFullYear();
-alert (oderFolder)
+var oderFolder = fso.GetFolder(fso.buildPath("\\\\nas\\Запросы", date.getFullYear()));
 var subOderFolders = new Enumerator(oderFolder.subFolders);
 for (; !subOderFolders.atEnd(); subOderFolders.moveNext()) {
-    
+    PATHTOORDERS.push = subOderFolders.item().path;
 }
 
 
@@ -18,13 +24,7 @@ var test = 101;
 resizeTo(WINDOWWIDTH, WINDOWHEIGHT);
 moveTo(screen.width / 2 - WINDOWWIDTH / 2, screen.height / 2 - WINDOWHEIGHT / 2)
 
-try {
-    var shell = new ActiveXObject("WScript.Shell");
-    var fso = new ActiveXObject("Scripting.FileSystemObject");
-} catch(e) {
-    alert("Ошибка: " + e.message);
-    close();        
-}
+
 
 var pathOfInstall = shell.Environment("User")('hta001path');
 var pathBtn = document.getElementById('choosePath');
