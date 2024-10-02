@@ -237,6 +237,10 @@ function createFolder() {
                     var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '03 ТЗ') + '\'"';
                     shell.Run(command, 0, true);
                 }
+                if (file.Name.indexOf('Бирка Шаблон') !== -1) {
+                    var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '03 ТЗ') + '\'"';
+                    shell.Run(command, 0, true);
+                }
                 if (file.Name.indexOf('Маршруты Шаблон') !== -1) {
                     var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '04 ТЕХПРОЦЕСС') + '\'"';
                     shell.Run(command, 0, true);
