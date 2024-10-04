@@ -78,7 +78,7 @@ var subOderFolders = new Enumerator(oderFolder.subFolders);
 for (; !subOderFolders.atEnd(); subOderFolders.moveNext()) {
     PATHTOORDERS.push(subOderFolders.item().path);
 }
-
+var PATHTOORDERS01 = "\\\\nas\\ОГТ\\Заказы ПЗПО";
 
 var WINDOWWIDTH = 400;
 var WINDOWHEIGHT = 400;
@@ -249,20 +249,27 @@ function createFolder() {
 
             //create links
             var shortcut = shell.CreateShortcut(fso.buildPath(newPath, '06 Запрос.lnk'));
-            for (var i = 0; i < PATHTOORDERS.length; i++) {
-                folder = fso.GetFolder(PATHTOORDERS[i]);
+            if (orderNum.value.indexOf('П') == -1) {
+                for (var i = 0; i < PATHTOORDERS.length; i++) {
+                    folder = fso.GetFolder(PATHTOORDERS[i]);
 
-                var subFolders = new Enumerator(folder.subFolders);
-                for (; !subFolders.atEnd(); subFolders.moveNext()) {
-                    var j = subFolders.item();
-                    if (j.path.indexOf(orderNum.value) !== -1) {
-                        shortcut.targetPath = j.path;
-                        shortcut.save();
-                        break;
+                    var subFolders = new Enumerator(folder.subFolders);
+                    for (; !subFolders.atEnd(); subFolders.moveNext()) {
+                        var j = subFolders.item();
+                        if (j.path.indexOf(orderNum.value) !== -1) {
+                            shortcut.targetPath = j.path;
+                            shortcut.save();
+                            break;
+                        }
                     }
-                }
 
+                }
+            } else {
+                folder = fso.GetFolder(PATHTOORDERS01);
+                shortcut.targetPath = PATHTOORDERS01.path;
+                shortcut.save();
             }
+            
 
             //open excel
             excel.Visible = true;
