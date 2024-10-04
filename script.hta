@@ -266,7 +266,7 @@ function createFolder() {
                 }
             } else {
                 folder = fso.GetFolder(PATHTOORDERS01);
-                shortcut.targetPath = PATHTOORDERS01.path;
+                shortcut.targetPath = folder.path;
                 shortcut.save();
             }
             
