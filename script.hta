@@ -252,7 +252,6 @@ function createFolder() {
             if (orderNum.value.indexOf('Ï') == -1) {
                 for (var i = 0; i < PATHTOORDERS.length; i++) {
                     folder = fso.GetFolder(PATHTOORDERS[i]);
-
                     var subFolders = new Enumerator(folder.subFolders);
                     for (; !subFolders.atEnd(); subFolders.moveNext()) {
                         var j = subFolders.item();
@@ -266,8 +265,15 @@ function createFolder() {
                 }
             } else {
                 folder = fso.GetFolder(PATHTOORDERS01);
-                shortcut.targetPath = folder.path;
-                shortcut.save();
+                var subFolders = new Enumerator(folder.subFolders);
+                for (; !subFolders.atEnd(); subFolders.moveNext()) {
+                    var j = subFolders.item();
+                    if (j.path.indexOf(orderNum.value) !== -1) {
+                        shortcut.targetPath = j.path;
+                        shortcut.save();
+                        break;
+                    }
+                }
             }
             
 
