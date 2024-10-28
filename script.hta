@@ -4,7 +4,7 @@
     <meta charset="Windows-1251">
     <hta:application id="selectFolder" border="thin" caption="yes" maximizeButton="no" minimizeButton="yes" showInTaskbar="yes" singleInstance="yes" sysMenu="yes" windowState="normal" scroll="no"/>    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    
     <style>
         .container {
             margin-top: 0.5em;
@@ -39,19 +39,23 @@
     </div>
     <div class="container">
         <label for="orderNum">номер запроса*</label>
-        <input name="orderNum" type="text" class="form-control" id="orderNum" placeholder="enter path">            
+        <input name="orderNum" type="text" class="form-control" id="orderNum">            
     </div>
     <div class="container">
         <label for="customer">заказчик</label>
-        <input name="customer" type="text" class="form-control" id="customer" placeholder="enter path">            
+        <input name="customer" type="text" class="form-control" id="customer">            
     </div>
     <div class="container">
         <label for="name">наименование</label>
-        <input name="name" type="text" class="form-control" id="name" placeholder="enter path">            
+        <input name="name" type="text" class="form-control" id="name">            
     </div>
     <div class="container">
         <label for="bpNum">номер чертежа</label>
-        <input name="bpNum" type="text" class="form-control" id="bpNum" placeholder="enter path">            
+        <input name="bpNum" type="text" class="form-control" id="bpNum">            
+    </div>
+    <div class="container">
+        <label for="techName">технолог</label>
+        <input name="techName" type="text" class="form-control" id="techName">            
     </div>
     <div class="container">        
         <input type="button" class="btn btn-primary form-control" value="создать" id="create">            
@@ -81,7 +85,7 @@ for (; !subOderFolders.atEnd(); subOderFolders.moveNext()) {
 var PATHTOORDERS01 = "\\\\nas\\ОГТ\\Заказы ПЗПО";
 
 var WINDOWWIDTH = 400;
-var WINDOWHEIGHT = 400;
+var WINDOWHEIGHT = 460;
 var test = 101;
 resizeTo(WINDOWWIDTH, WINDOWHEIGHT);
 moveTo(screen.width / 2 - WINDOWWIDTH / 2, screen.height / 2 - WINDOWHEIGHT / 2)
@@ -89,14 +93,22 @@ moveTo(screen.width / 2 - WINDOWWIDTH / 2, screen.height / 2 - WINDOWHEIGHT / 2)
 
 
 var pathOfInstall = shell.Environment("User")('hta001path');
+var techNameEnv = shell.Environment("User")('hta001TechName');
 var pathBtn = document.getElementById('choosePath');
 var targetPath = document.getElementById('targetPath');
+var techName = document.getElementById('techName');
 var crtBtn = document.getElementById('create');
 
 if (pathOfInstall) {
     targetPath.value = pathOfInstall;
 } else {
     targetPath.value = "";
+}
+
+if (techNameEnv) {
+    techName.value = techNameEnv;
+} else {
+    techName.value = "";
 }
 
 pathBtn.onclick = openD;
@@ -286,9 +298,13 @@ function createFolder() {
             sheet.Cells(11, 2).Value = name;
             sheet.Cells(12, 2).Value = bpNum;
             workbook.Save();
-            
+
+            if ((/^[А-ЯЁ][а-яё]+ [А-ЯЁ]\.[А-ЯЁ]\.$/).test(techName.value)) {
+                shell.Enumerator("User")('hta001TechName') = techName.value;
+            }            
+
             close();
-            alert('папка создана');
+            //alert('папка создана');
 
         } else {
             alert('введите номер запроса\nдопустимые символы: A-Z А-Я 0-9 \. \_ \- ( )');
