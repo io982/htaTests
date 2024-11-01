@@ -294,15 +294,22 @@ function createFolder() {
             var workbook = excel.Workbooks.Open(fso.buildPath(fso.buildPath(newPath, '01 ПРЕДРАСЧЕТ'), newName + '.xlsm'));
             var sheet = workbook.Sheets("Калькуляция");
             sheet.Cells(1, 2).Value = orderNum.value;
-            sheet.Cells(2, 2).Value = customer;
-            sheet.Cells(11, 2).Value = name;
-            sheet.Cells(12, 2).Value = bpNum;
-            workbook.Save();
-
+            sheet.Cells(2, 2).Value = customer;            
             if ((/^[А-ЯЁ][а-яё]+ [А-ЯЁ]\.[А-ЯЁ]\.$/).test(techName.value)) {
-                shell.Enumerator("User")('hta001TechName') = techName.value;
-            }            
+                sheet.Cells(6, 2).Value = techName.value;
+                if (shell.Environment("User")('hta001TechName') !== techName.value){
+                    shell.Environment("User")('hta001TechName') = techName.value;
+                }
+                
+            } 
+            var day = ('0' + date.getDate()).slice(-2);
+            var month = ('0' + (date.getMonth() + 1)).slice(-2);
+            var year = date.getFullYear();
 
+            sheet.Cells(10, 2).Value = day + "." + month + "." + year;
+            sheet.Cells(11, 2).Value = name;
+            sheet.Cells(12, 2).Value = bpNum; 
+            workbook.Save();
             close();
             //alert('папка создана');
 
