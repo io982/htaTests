@@ -77,7 +77,13 @@ var PATHTOSAMPLE = "\\\\nas\\ОГТ\\МТЦ";
 //var PATHTOORDERS = ["E:\\Downloads"];
 var PATHTOORDERS = [];
 var date = new Date;
-var oderFolder = fso.GetFolder(fso.buildPath("\\\\nas\\Запросы", date.getFullYear()));
+try {
+    var oderFolder = fso.GetFolder(fso.buildPath("\\\\nas\\Запросы", date.getFullYear()));
+} catch(e) {
+    alert("Ошибка: " + e.message);
+    close();
+}
+
 var subOderFolders = new Enumerator(oderFolder.subFolders);
 for (; !subOderFolders.atEnd(); subOderFolders.moveNext()) {
     PATHTOORDERS.push(subOderFolders.item().path);
