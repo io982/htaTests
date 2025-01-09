@@ -80,7 +80,7 @@ var date = new Date;
 try {
     var oderFolder = fso.GetFolder(fso.buildPath("\\\\nas\\Запросы", date.getFullYear()));
 } catch(e) {
-    alert("Ошибка: " + e.message);
+    alert("Ошибка: " + e.message + "\n" + fso.buildPath("\\\\nas\\Запросы", date.getFullYear()));
     close();
 }
 
