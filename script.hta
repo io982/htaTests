@@ -246,7 +246,7 @@ function createFolder() {
             var files = new Enumerator(folder.files);
             for (; !files.atEnd(); files.moveNext()) {
                 var file = files.item();
-                if (file.Name.indexOf('Îáğàçåö ïîëíûé') !== -1) {
+                if (file.Name.indexOf('Îáğàçåö ñ ÌÊ') !== -1) {
                     var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ') + '\'"';
                     shell.Run(command, 0, true);
                     fso.GetFile(fso.buildPath(newPath, '01 ÏĞÅÄĞÀÑ×ÅÒ') + "\\" + file.Name).name = newName + '.xlsm';
