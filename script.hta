@@ -58,7 +58,7 @@
     </div>
     <div class="container">
         <label for="mkCheck">ïðåäðàñ÷åò</label>
-        <input name="mkCheck" type="checkbox" id="mkCheck" onclick="chch()" checked>            
+        <input name="mkCheck" type="checkbox" id="mkCheck" checked>            
     </div>
     <div class="container">        
         <input type="button" class="btn btn-primary form-control" value="ñîçäàòü" id="create">            
@@ -108,11 +108,6 @@ var targetPath = document.getElementById('targetPath');
 var techName = document.getElementById('techName');
 var crtBtn = document.getElementById('create')
 var mkCheck = document.getElementById('mkCheck')
-
-function chch() {
-    alert(mkCheck.checked);
-}
-
 
 if (pathOfInstall) {
     targetPath.value = pathOfInstall;
@@ -264,7 +259,7 @@ function createFolder() {
                     }
                 } else {
                     if (file.Name.indexOf('Îáðàçåö ñ ÌÊ') !== -1) {
-                        var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '01 ÏÐÅÄÐÀÑ×ÅÒ') + '\'"';
+                        var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '05 ÇÀÏÓÑÊ') + '\'"';
                         shell.Run(command, 0, true);
                         fso.GetFile(fso.buildPath(newPath, '05 ÇÀÏÓÑÊ') + "\\" + file.Name).name = newName + '.xlsm';
                     }
