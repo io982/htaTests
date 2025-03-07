@@ -56,6 +56,10 @@
         <label for="techName">òåõíîëîã</label>
         <input name="techName" type="text" class="form-control" id="techName">            
     </div>
+    <div class="container">
+        <label for="mkCheck">ïðåäðàñ÷åò</label>
+        <input name="mkCheck" type="checkbox" id="mkCheck" onclick="chch()" checked>            
+    </div>
     <div class="container">        
         <input type="button" class="btn btn-primary form-control" value="ñîçäàòü" id="create">            
     </div>
@@ -90,7 +94,7 @@ for (; !subOderFolders.atEnd(); subOderFolders.moveNext()) {
 var PATHTOORDERS01 = "\\\\nas\\ÎÃÒ\\Çàêàçû ÏÇÏÎ";
 
 var WINDOWWIDTH = 400;
-var WINDOWHEIGHT = 460;
+var WINDOWHEIGHT = 510;
 var test = 101;
 resizeTo(WINDOWWIDTH, WINDOWHEIGHT);
 moveTo(screen.width / 2 - WINDOWWIDTH / 2, screen.height / 2 - WINDOWHEIGHT / 2)
@@ -102,7 +106,13 @@ var techNameEnv = shell.Environment("User")('hta001TechName');
 var pathBtn = document.getElementById('choosePath');
 var targetPath = document.getElementById('targetPath');
 var techName = document.getElementById('techName');
-var crtBtn = document.getElementById('create');
+var crtBtn = document.getElementById('create')
+var mkCheck = document.getElementById('mkCheck')
+
+function chch() {
+    alert(mkCheck.checked);
+}
+
 
 if (pathOfInstall) {
     targetPath.value = pathOfInstall;
@@ -246,11 +256,20 @@ function createFolder() {
             var files = new Enumerator(folder.files);
             for (; !files.atEnd(); files.moveNext()) {
                 var file = files.item();
-                if (file.Name.indexOf('Îáðàçåö ñ ÌÊ') !== -1) {
-                    var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '01 ÏÐÅÄÐÀÑ×ÅÒ') + '\'"';
-                    shell.Run(command, 0, true);
-                    fso.GetFile(fso.buildPath(newPath, '01 ÏÐÅÄÐÀÑ×ÅÒ') + "\\" + file.Name).name = newName + '.xlsm';
+                if (mkCheck.checked) {
+                    if (file.Name.indexOf('Îáðàçåö ïîëíûé') !== -1) {
+                        var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '01 ÏÐÅÄÐÀÑ×ÅÒ') + '\'"';
+                        shell.Run(command, 0, true);
+                        fso.GetFile(fso.buildPath(newPath, '01 ÏÐÅÄÐÀÑ×ÅÒ') + "\\" + file.Name).name = newName + '.xlsm';
+                    }
+                } else {
+                    if (file.Name.indexOf('Îáðàçåö ñ ÌÊ') !== -1) {
+                        var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '01 ÏÐÅÄÐÀÑ×ÅÒ') + '\'"';
+                        shell.Run(command, 0, true);
+                        fso.GetFile(fso.buildPath(newPath, '05 ÇÀÏÓÑÊ') + "\\" + file.Name).name = newName + '.xlsm';
+                    }
                 }
+                
                 if (file.Name.indexOf('ÒÇ Øàáëîí') !== -1) {
                     var command = 'powershell.exe -Command "Copy-Item -Path \'' + file.path + '\' -Destination \'' + fso.buildPath(newPath, '03 ÒÇ') + '\'"';
                     shell.Run(command, 0, true);
@@ -297,7 +316,12 @@ function createFolder() {
 
             //open excel
             excel.Visible = true;
-            var workbook = excel.Workbooks.Open(fso.buildPath(fso.buildPath(newPath, '01 ÏÐÅÄÐÀÑ×ÅÒ'), newName + '.xlsm'));
+            if (mkCheck.checked) {
+                var workbook = excel.Workbooks.Open(fso.buildPath(fso.buildPath(newPath, '01 ÏÐÅÄÐÀÑ×ÅÒ'), newName + '.xlsm'));
+            } else {
+                var workbook = excel.Workbooks.Open(fso.buildPath(fso.buildPath(newPath, '05 ÇÀÏÓÑÊ'), newName + '.xlsm'));
+            }
+            
             var sheet = workbook.Sheets("Êàëüêóëÿöèÿ");
             sheet.Cells(1, 2).Value = orderNum.value;
             sheet.Cells(2, 2).Value = customer;            
